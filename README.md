@@ -29,4 +29,4 @@ npm run prd
 
 koa2-test,express-test里面都有相应中间件的简单源码。
 
-![node-blog]((https://github.com/GxTongX/node-blog/raw/master/img/node-blog.png))
+![node-blog](https://github.com/GxTongX/node.js-blog/raw/master/img/node-blog.png)
