@@ -1,0 +1,15 @@
+2020-03-09 11:37:01: 假装出错 1583725021033
+2020-03-09 11:37:04: 假装出错 1583725024226
+2020-03-09 11:37:04: Error: /err 出错啦
+2020-03-09 11:37:04:     at Server.<anonymous> (E:\node\pm2-test\app.js:10:15)
+2020-03-09 11:37:04:     at Server.emit (events.js:223:5)
+2020-03-09 11:37:04:     at Server.<anonymous> (C:\Users\GxTongX\AppData\Roaming\npm\node_modules\pm2\node_modules\_@pm2_io@4.3.3@@pm2\io\build\main\metrics\httpMetrics.js:166:33)
+2020-03-09 11:37:04:     at parserOnIncoming (_http_server.js:748:12)
+2020-03-09 11:37:04:     at HTTPParser.parserOnHeadersComplete (_http_common.js:115:17)
+2020-03-09 11:37:04: 假装出错 1583725024745
+2020-03-09 11:37:04: Error: /err 出错啦
+2020-03-09 11:37:04:     at Server.<anonymous> (E:\node\pm2-test\app.js:10:15)
+2020-03-09 11:37:04:     at Server.emit (events.js:223:5)
+2020-03-09 11:37:04:     at Server.<anonymous> (C:\Users\GxTongX\AppData\Roaming\npm\node_modules\pm2\node_modules\_@pm2_io@4.3.3@@pm2\io\build\main\metrics\httpMetrics.js:166:33)
+2020-03-09 11:37:04:     at parserOnIncoming (_http_server.js:748:12)
+2020-03-09 11:37:04:     at HTTPParser.parserOnHeadersComplete (_http_common.js:115:17)

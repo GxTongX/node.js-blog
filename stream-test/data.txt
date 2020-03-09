@@ -1,0 +1,1218 @@
+scss和sass
+
+Scss和Sass的区别：
+Sass（ 英文全称：Syntactically Awesome Stylesheets）
+Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+Scss（Sassy CSS）的介绍：
+Scss 是 Sass 3 引入的新语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。也就是说，任何标准的 CSS3 样式表都是具有相同语义的有效的SCSS 文件。另外，SCSS 还能识别大部分 CSS hacks（一些 CSS 小技巧）和特定于浏览器的语法。
+Sass的语法：
+Sass 有两种语法：第一种被称为 SCSS (Sassy CSS)；第二种比较老的语法称为缩排语法（或者就称为 "Sass"）， 提供了一种更简洁的 CSS 书写方式。
+使用：
+Sass 有三种使用方式： 命令行工具、独立的 Ruby 模块，以及包含 Ruby on Rails 和 Merb 作为支持 Rack 的框架的插件。
+Sass不使用花括号，而是通过缩排的方式来表达选择符的嵌套层级，而且也不使用分号，而是用换行符来分隔属性。
+#sidebar
+  width: 30%
+  background-color: #faa
+
+SCSS 需要使用分号和花括号而不是换行和缩进。
+#sidebar {
+  width: 30%;
+  background-color: #faa;
+}
+
+SCSS 对空白符号不敏感，所以以上代码也可以写成下面的形式：
+#sidebar {width: 30%; background-color: #faa}
+
+任一语法都可以导入另一种语法撰写的文件中。 只要使用 sass-convert 命令行工具，就可以将一种语法转换为另一种语法：
+# 将 Sass 转换为 SCSS
+$ sass-convert style.sass style.scss
+
+# 将 SCSS 转换为 Sass
+$ sass-convert style.scss style.sass
+
+sass-嵌套选择器:选择器里面在写选择器，和顺序无关
+.nav {
+    border: 1px solid green;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid red;
+        }
+    }
+}
+
+sass-变量:便于修改，还可以使不同的变量是同一个值。
+$grey: #666;
+$gray: $grey;
+.nav {
+    border: 1px solid $gray;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid $grey;
+        }
+    }
+}
+
+sass-mixin:设置@mixin debug(可以为空){} ----引用@include debug(){}
+简单用法
+$border-width: 1px;
+@mixin debug {
+    border: 1px solid red;
+    background: $grey;//可以添加多个样式
+}
+.nav {
+    @include debug;
+    > ul {
+        background: white;
+        >li {
+            @include debug;
+        }
+    }
+}
+
+高级用法：mixin可以认为是一个函数，可以传递一个参数
+@mixin debug($border-color) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug(red);
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);//传递的参数不同
+        }
+    }
+}
+
+还可以给一个默认值。比如说默认是红色
+@mixin debug($border-color:red) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug;//有传入的默认red。
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);
+        }
+    }
+}
+
+%---placeholder：设置%box{}---引用@extend %box;
+不拷贝样式，只是把选择器移到代码的前面
+  <div class="nav">
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+      </ul>
+  </div>
+  <div class="demo"></div>
+
+若果想让demo和nav有相同的样式，可以采用mixin方法，但是实际只是减少了手写代码，CSS解析时没有减少
+@mixin box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+   
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @include box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @include box;
+}
+
+
+
+
+
+所以可以采用以下方法：
+%box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @extend %box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @extend %box;
+}
+
+通过这种方法。CSS只是解析了一次
+
+
+@mixin和%（placeholder）的区别：
+@mixin可以传递参数，而%不行；
+@mixin的调用方式是@include，而%的调用方式是@extend；
+@include产生的样式是以复制拷贝的方式存在的，而@extend产生的样式是以组合申明的方式存在的。
+
+
+
+
+scss和sass
+
+Scss和Sass的区别：
+Sass（ 英文全称：Syntactically Awesome Stylesheets）
+Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+Scss（Sassy CSS）的介绍：
+Scss 是 Sass 3 引入的新语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。也就是说，任何标准的 CSS3 样式表都是具有相同语义的有效的SCSS 文件。另外，SCSS 还能识别大部分 CSS hacks（一些 CSS 小技巧）和特定于浏览器的语法。
+Sass的语法：
+Sass 有两种语法：第一种被称为 SCSS (Sassy CSS)；第二种比较老的语法称为缩排语法（或者就称为 "Sass"）， 提供了一种更简洁的 CSS 书写方式。
+使用：
+Sass 有三种使用方式： 命令行工具、独立的 Ruby 模块，以及包含 Ruby on Rails 和 Merb 作为支持 Rack 的框架的插件。
+Sass不使用花括号，而是通过缩排的方式来表达选择符的嵌套层级，而且也不使用分号，而是用换行符来分隔属性。
+#sidebar
+  width: 30%
+  background-color: #faa
+
+SCSS 需要使用分号和花括号而不是换行和缩进。
+#sidebar {
+  width: 30%;
+  background-color: #faa;
+}
+
+SCSS 对空白符号不敏感，所以以上代码也可以写成下面的形式：
+#sidebar {width: 30%; background-color: #faa}
+
+任一语法都可以导入另一种语法撰写的文件中。 只要使用 sass-convert 命令行工具，就可以将一种语法转换为另一种语法：
+# 将 Sass 转换为 SCSS
+$ sass-convert style.sass style.scss
+
+# 将 SCSS 转换为 Sass
+$ sass-convert style.scss style.sass
+
+sass-嵌套选择器:选择器里面在写选择器，和顺序无关
+.nav {
+    border: 1px solid green;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid red;
+        }
+    }
+}
+
+sass-变量:便于修改，还可以使不同的变量是同一个值。
+$grey: #666;
+$gray: $grey;
+.nav {
+    border: 1px solid $gray;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid $grey;
+        }
+    }
+}
+
+sass-mixin:设置@mixin debug(可以为空){} ----引用@include debug(){}
+简单用法
+$border-width: 1px;
+@mixin debug {
+    border: 1px solid red;
+    background: $grey;//可以添加多个样式
+}
+.nav {
+    @include debug;
+    > ul {
+        background: white;
+        >li {
+            @include debug;
+        }
+    }
+}
+
+高级用法：mixin可以认为是一个函数，可以传递一个参数
+@mixin debug($border-color) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug(red);
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);//传递的参数不同
+        }
+    }
+}
+
+还可以给一个默认值。比如说默认是红色
+@mixin debug($border-color:red) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug;//有传入的默认red。
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);
+        }
+    }
+}
+
+%---placeholder：设置%box{}---引用@extend %box;
+不拷贝样式，只是把选择器移到代码的前面
+  <div class="nav">
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+      </ul>
+  </div>
+  <div class="demo"></div>
+
+若果想让demo和nav有相同的样式，可以采用mixin方法，但是实际只是减少了手写代码，CSS解析时没有减少
+@mixin box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+   
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @include box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @include box;
+}
+
+
+
+
+
+所以可以采用以下方法：
+%box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @extend %box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @extend %box;
+}
+
+通过这种方法。CSS只是解析了一次
+
+
+@mixin和%（placeholder）的区别：
+@mixin可以传递参数，而%不行；
+@mixin的调用方式是@include，而%的调用方式是@extend；
+@include产生的样式是以复制拷贝的方式存在的，而@extend产生的样式是以组合申明的方式存在的。
+
+
+
+
+scss和sass
+
+Scss和Sass的区别：
+Sass（ 英文全称：Syntactically Awesome Stylesheets）
+Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+Scss（Sassy CSS）的介绍：
+Scss 是 Sass 3 引入的新语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。也就是说，任何标准的 CSS3 样式表都是具有相同语义的有效的SCSS 文件。另外，SCSS 还能识别大部分 CSS hacks（一些 CSS 小技巧）和特定于浏览器的语法。
+Sass的语法：
+Sass 有两种语法：第一种被称为 SCSS (Sassy CSS)；第二种比较老的语法称为缩排语法（或者就称为 "Sass"）， 提供了一种更简洁的 CSS 书写方式。
+使用：
+Sass 有三种使用方式： 命令行工具、独立的 Ruby 模块，以及包含 Ruby on Rails 和 Merb 作为支持 Rack 的框架的插件。
+Sass不使用花括号，而是通过缩排的方式来表达选择符的嵌套层级，而且也不使用分号，而是用换行符来分隔属性。
+#sidebar
+  width: 30%
+  background-color: #faa
+
+SCSS 需要使用分号和花括号而不是换行和缩进。
+#sidebar {
+  width: 30%;
+  background-color: #faa;
+}
+
+SCSS 对空白符号不敏感，所以以上代码也可以写成下面的形式：
+#sidebar {width: 30%; background-color: #faa}
+
+任一语法都可以导入另一种语法撰写的文件中。 只要使用 sass-convert 命令行工具，就可以将一种语法转换为另一种语法：
+# 将 Sass 转换为 SCSS
+$ sass-convert style.sass style.scss
+
+# 将 SCSS 转换为 Sass
+$ sass-convert style.scss style.sass
+
+sass-嵌套选择器:选择器里面在写选择器，和顺序无关
+.nav {
+    border: 1px solid green;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid red;
+        }
+    }
+}
+
+sass-变量:便于修改，还可以使不同的变量是同一个值。
+$grey: #666;
+$gray: $grey;
+.nav {
+    border: 1px solid $gray;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid $grey;
+        }
+    }
+}
+
+sass-mixin:设置@mixin debug(可以为空){} ----引用@include debug(){}
+简单用法
+$border-width: 1px;
+@mixin debug {
+    border: 1px solid red;
+    background: $grey;//可以添加多个样式
+}
+.nav {
+    @include debug;
+    > ul {
+        background: white;
+        >li {
+            @include debug;
+        }
+    }
+}
+
+高级用法：mixin可以认为是一个函数，可以传递一个参数
+@mixin debug($border-color) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug(red);
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);//传递的参数不同
+        }
+    }
+}
+
+还可以给一个默认值。比如说默认是红色
+@mixin debug($border-color:red) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug;//有传入的默认red。
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);
+        }
+    }
+}
+
+%---placeholder：设置%box{}---引用@extend %box;
+不拷贝样式，只是把选择器移到代码的前面
+  <div class="nav">
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+      </ul>
+  </div>
+  <div class="demo"></div>
+
+若果想让demo和nav有相同的样式，可以采用mixin方法，但是实际只是减少了手写代码，CSS解析时没有减少
+@mixin box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+   
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @include box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @include box;
+}
+
+
+
+
+
+所以可以采用以下方法：
+%box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @extend %box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @extend %box;
+}
+
+通过这种方法。CSS只是解析了一次
+
+
+@mixin和%（placeholder）的区别：
+@mixin可以传递参数，而%不行；
+@mixin的调用方式是@include，而%的调用方式是@extend；
+@include产生的样式是以复制拷贝的方式存在的，而@extend产生的样式是以组合申明的方式存在的。
+
+
+
+
+scss和sass
+
+Scss和Sass的区别：
+Sass（ 英文全称：Syntactically Awesome Stylesheets）
+Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+Scss（Sassy CSS）的介绍：
+Scss 是 Sass 3 引入的新语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。也就是说，任何标准的 CSS3 样式表都是具有相同语义的有效的SCSS 文件。另外，SCSS 还能识别大部分 CSS hacks（一些 CSS 小技巧）和特定于浏览器的语法。
+Sass的语法：
+Sass 有两种语法：第一种被称为 SCSS (Sassy CSS)；第二种比较老的语法称为缩排语法（或者就称为 "Sass"）， 提供了一种更简洁的 CSS 书写方式。
+使用：
+Sass 有三种使用方式： 命令行工具、独立的 Ruby 模块，以及包含 Ruby on Rails 和 Merb 作为支持 Rack 的框架的插件。
+Sass不使用花括号，而是通过缩排的方式来表达选择符的嵌套层级，而且也不使用分号，而是用换行符来分隔属性。
+#sidebar
+  width: 30%
+  background-color: #faa
+
+SCSS 需要使用分号和花括号而不是换行和缩进。
+#sidebar {
+  width: 30%;
+  background-color: #faa;
+}
+
+SCSS 对空白符号不敏感，所以以上代码也可以写成下面的形式：
+#sidebar {width: 30%; background-color: #faa}
+
+任一语法都可以导入另一种语法撰写的文件中。 只要使用 sass-convert 命令行工具，就可以将一种语法转换为另一种语法：
+# 将 Sass 转换为 SCSS
+$ sass-convert style.sass style.scss
+
+# 将 SCSS 转换为 Sass
+$ sass-convert style.scss style.sass
+
+sass-嵌套选择器:选择器里面在写选择器，和顺序无关
+.nav {
+    border: 1px solid green;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid red;
+        }
+    }
+}
+
+sass-变量:便于修改，还可以使不同的变量是同一个值。
+$grey: #666;
+$gray: $grey;
+.nav {
+    border: 1px solid $gray;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid $grey;
+        }
+    }
+}
+
+sass-mixin:设置@mixin debug(可以为空){} ----引用@include debug(){}
+简单用法
+$border-width: 1px;
+@mixin debug {
+    border: 1px solid red;
+    background: $grey;//可以添加多个样式
+}
+.nav {
+    @include debug;
+    > ul {
+        background: white;
+        >li {
+            @include debug;
+        }
+    }
+}
+
+高级用法：mixin可以认为是一个函数，可以传递一个参数
+@mixin debug($border-color) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug(red);
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);//传递的参数不同
+        }
+    }
+}
+
+还可以给一个默认值。比如说默认是红色
+@mixin debug($border-color:red) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug;//有传入的默认red。
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);
+        }
+    }
+}
+
+%---placeholder：设置%box{}---引用@extend %box;
+不拷贝样式，只是把选择器移到代码的前面
+  <div class="nav">
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+      </ul>
+  </div>
+  <div class="demo"></div>
+
+若果想让demo和nav有相同的样式，可以采用mixin方法，但是实际只是减少了手写代码，CSS解析时没有减少
+@mixin box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+   
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @include box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @include box;
+}
+
+
+
+
+
+所以可以采用以下方法：
+%box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @extend %box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @extend %box;
+}
+
+通过这种方法。CSS只是解析了一次
+
+
+@mixin和%（placeholder）的区别：
+@mixin可以传递参数，而%不行；
+@mixin的调用方式是@include，而%的调用方式是@extend；
+@include产生的样式是以复制拷贝的方式存在的，而@extend产生的样式是以组合申明的方式存在的。
+
+
+
+
+scss和sass
+
+Scss和Sass的区别：
+Sass（ 英文全称：Syntactically Awesome Stylesheets）
+Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+Scss（Sassy CSS）的介绍：
+Scss 是 Sass 3 引入的新语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。也就是说，任何标准的 CSS3 样式表都是具有相同语义的有效的SCSS 文件。另外，SCSS 还能识别大部分 CSS hacks（一些 CSS 小技巧）和特定于浏览器的语法。
+Sass的语法：
+Sass 有两种语法：第一种被称为 SCSS (Sassy CSS)；第二种比较老的语法称为缩排语法（或者就称为 "Sass"）， 提供了一种更简洁的 CSS 书写方式。
+使用：
+Sass 有三种使用方式： 命令行工具、独立的 Ruby 模块，以及包含 Ruby on Rails 和 Merb 作为支持 Rack 的框架的插件。
+Sass不使用花括号，而是通过缩排的方式来表达选择符的嵌套层级，而且也不使用分号，而是用换行符来分隔属性。
+#sidebar
+  width: 30%
+  background-color: #faa
+
+SCSS 需要使用分号和花括号而不是换行和缩进。
+#sidebar {
+  width: 30%;
+  background-color: #faa;
+}
+
+SCSS 对空白符号不敏感，所以以上代码也可以写成下面的形式：
+#sidebar {width: 30%; background-color: #faa}
+
+任一语法都可以导入另一种语法撰写的文件中。 只要使用 sass-convert 命令行工具，就可以将一种语法转换为另一种语法：
+# 将 Sass 转换为 SCSS
+$ sass-convert style.sass style.scss
+
+# 将 SCSS 转换为 Sass
+$ sass-convert style.scss style.sass
+
+sass-嵌套选择器:选择器里面在写选择器，和顺序无关
+.nav {
+    border: 1px solid green;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid red;
+        }
+    }
+}
+
+sass-变量:便于修改，还可以使不同的变量是同一个值。
+$grey: #666;
+$gray: $grey;
+.nav {
+    border: 1px solid $gray;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid $grey;
+        }
+    }
+}
+
+sass-mixin:设置@mixin debug(可以为空){} ----引用@include debug(){}
+简单用法
+$border-width: 1px;
+@mixin debug {
+    border: 1px solid red;
+    background: $grey;//可以添加多个样式
+}
+.nav {
+    @include debug;
+    > ul {
+        background: white;
+        >li {
+            @include debug;
+        }
+    }
+}
+
+高级用法：mixin可以认为是一个函数，可以传递一个参数
+@mixin debug($border-color) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug(red);
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);//传递的参数不同
+        }
+    }
+}
+
+还可以给一个默认值。比如说默认是红色
+@mixin debug($border-color:red) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug;//有传入的默认red。
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);
+        }
+    }
+}
+
+%---placeholder：设置%box{}---引用@extend %box;
+不拷贝样式，只是把选择器移到代码的前面
+  <div class="nav">
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+      </ul>
+  </div>
+  <div class="demo"></div>
+
+若果想让demo和nav有相同的样式，可以采用mixin方法，但是实际只是减少了手写代码，CSS解析时没有减少
+@mixin box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+   
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @include box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @include box;
+}
+
+
+
+
+
+所以可以采用以下方法：
+%box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @extend %box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @extend %box;
+}
+
+通过这种方法。CSS只是解析了一次
+
+
+@mixin和%（placeholder）的区别：
+@mixin可以传递参数，而%不行；
+@mixin的调用方式是@include，而%的调用方式是@extend；
+@include产生的样式是以复制拷贝的方式存在的，而@extend产生的样式是以组合申明的方式存在的。
+
+
+
+
+scss和sass
+
+Scss和Sass的区别：
+Sass（ 英文全称：Syntactically Awesome Stylesheets）
+Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+Scss（Sassy CSS）的介绍：
+Scss 是 Sass 3 引入的新语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。也就是说，任何标准的 CSS3 样式表都是具有相同语义的有效的SCSS 文件。另外，SCSS 还能识别大部分 CSS hacks（一些 CSS 小技巧）和特定于浏览器的语法。
+Sass的语法：
+Sass 有两种语法：第一种被称为 SCSS (Sassy CSS)；第二种比较老的语法称为缩排语法（或者就称为 "Sass"）， 提供了一种更简洁的 CSS 书写方式。
+使用：
+Sass 有三种使用方式： 命令行工具、独立的 Ruby 模块，以及包含 Ruby on Rails 和 Merb 作为支持 Rack 的框架的插件。
+Sass不使用花括号，而是通过缩排的方式来表达选择符的嵌套层级，而且也不使用分号，而是用换行符来分隔属性。
+#sidebar
+  width: 30%
+  background-color: #faa
+
+SCSS 需要使用分号和花括号而不是换行和缩进。
+#sidebar {
+  width: 30%;
+  background-color: #faa;
+}
+
+SCSS 对空白符号不敏感，所以以上代码也可以写成下面的形式：
+#sidebar {width: 30%; background-color: #faa}
+
+任一语法都可以导入另一种语法撰写的文件中。 只要使用 sass-convert 命令行工具，就可以将一种语法转换为另一种语法：
+# 将 Sass 转换为 SCSS
+$ sass-convert style.sass style.scss
+
+# 将 SCSS 转换为 Sass
+$ sass-convert style.scss style.sass
+
+sass-嵌套选择器:选择器里面在写选择器，和顺序无关
+.nav {
+    border: 1px solid green;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid red;
+        }
+    }
+}
+
+sass-变量:便于修改，还可以使不同的变量是同一个值。
+$grey: #666;
+$gray: $grey;
+.nav {
+    border: 1px solid $gray;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid $grey;
+        }
+    }
+}
+
+sass-mixin:设置@mixin debug(可以为空){} ----引用@include debug(){}
+简单用法
+$border-width: 1px;
+@mixin debug {
+    border: 1px solid red;
+    background: $grey;//可以添加多个样式
+}
+.nav {
+    @include debug;
+    > ul {
+        background: white;
+        >li {
+            @include debug;
+        }
+    }
+}
+
+高级用法：mixin可以认为是一个函数，可以传递一个参数
+@mixin debug($border-color) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug(red);
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);//传递的参数不同
+        }
+    }
+}
+
+还可以给一个默认值。比如说默认是红色
+@mixin debug($border-color:red) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug;//有传入的默认red。
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);
+        }
+    }
+}
+
+%---placeholder：设置%box{}---引用@extend %box;
+不拷贝样式，只是把选择器移到代码的前面
+  <div class="nav">
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+      </ul>
+  </div>
+  <div class="demo"></div>
+
+若果想让demo和nav有相同的样式，可以采用mixin方法，但是实际只是减少了手写代码，CSS解析时没有减少
+@mixin box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+   
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @include box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @include box;
+}
+
+
+
+
+
+所以可以采用以下方法：
+%box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @extend %box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @extend %box;
+}
+
+通过这种方法。CSS只是解析了一次
+
+
+@mixin和%（placeholder）的区别：
+@mixin可以传递参数，而%不行；
+@mixin的调用方式是@include，而%的调用方式是@extend；
+@include产生的样式是以复制拷贝的方式存在的，而@extend产生的样式是以组合申明的方式存在的。
+
+
+
+
+scss和sass
+
+Scss和Sass的区别：
+Sass（ 英文全称：Syntactically Awesome Stylesheets）
+Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+Scss（Sassy CSS）的介绍：
+Scss 是 Sass 3 引入的新语法，其语法完全兼容 CSS3，并且继承了 Sass 的强大功能。也就是说，任何标准的 CSS3 样式表都是具有相同语义的有效的SCSS 文件。另外，SCSS 还能识别大部分 CSS hacks（一些 CSS 小技巧）和特定于浏览器的语法。
+Sass的语法：
+Sass 有两种语法：第一种被称为 SCSS (Sassy CSS)；第二种比较老的语法称为缩排语法（或者就称为 "Sass"）， 提供了一种更简洁的 CSS 书写方式。
+使用：
+Sass 有三种使用方式： 命令行工具、独立的 Ruby 模块，以及包含 Ruby on Rails 和 Merb 作为支持 Rack 的框架的插件。
+Sass不使用花括号，而是通过缩排的方式来表达选择符的嵌套层级，而且也不使用分号，而是用换行符来分隔属性。
+#sidebar
+  width: 30%
+  background-color: #faa
+
+SCSS 需要使用分号和花括号而不是换行和缩进。
+#sidebar {
+  width: 30%;
+  background-color: #faa;
+}
+
+SCSS 对空白符号不敏感，所以以上代码也可以写成下面的形式：
+#sidebar {width: 30%; background-color: #faa}
+
+任一语法都可以导入另一种语法撰写的文件中。 只要使用 sass-convert 命令行工具，就可以将一种语法转换为另一种语法：
+# 将 Sass 转换为 SCSS
+$ sass-convert style.sass style.scss
+
+# 将 SCSS 转换为 Sass
+$ sass-convert style.scss style.sass
+
+sass-嵌套选择器:选择器里面在写选择器，和顺序无关
+.nav {
+    border: 1px solid green;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid red;
+        }
+    }
+}
+
+sass-变量:便于修改，还可以使不同的变量是同一个值。
+$grey: #666;
+$gray: $grey;
+.nav {
+    border: 1px solid $gray;
+    > ul {
+        background: white;
+        >li {
+            border: 1px solid $grey;
+        }
+    }
+}
+
+sass-mixin:设置@mixin debug(可以为空){} ----引用@include debug(){}
+简单用法
+$border-width: 1px;
+@mixin debug {
+    border: 1px solid red;
+    background: $grey;//可以添加多个样式
+}
+.nav {
+    @include debug;
+    > ul {
+        background: white;
+        >li {
+            @include debug;
+        }
+    }
+}
+
+高级用法：mixin可以认为是一个函数，可以传递一个参数
+@mixin debug($border-color) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug(red);
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);//传递的参数不同
+        }
+    }
+}
+
+还可以给一个默认值。比如说默认是红色
+@mixin debug($border-color:red) {
+    border: 1px solid $border-color;
+    background: $grey;
+}
+.nav {
+    @include debug;//有传入的默认red。
+    > ul {
+        background: white;
+        >li {
+            @include debug(green);
+        }
+    }
+}
+
+%---placeholder：设置%box{}---引用@extend %box;
+不拷贝样式，只是把选择器移到代码的前面
+  <div class="nav">
+      <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+      </ul>
+  </div>
+  <div class="demo"></div>
+
+若果想让demo和nav有相同的样式，可以采用mixin方法，但是实际只是减少了手写代码，CSS解析时没有减少
+@mixin box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+   
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @include box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @include box;
+}
+
+
+
+
+
+所以可以采用以下方法：
+%box {
+    box-shadow: 0 0 3px black;
+            margin: 10px;
+            background: white;
+            border-radius: 10px;
+}
+.nav {
+    > ul {
+        background: white;
+        border: $grey;
+        >li {
+            @extend %box;
+        }
+    }
+}
+.demo{
+    width: 100px;
+    height: 100px;
+    @extend %box;
+}
+
+通过这种方法。CSS只是解析了一次
+
+
+@mixin和%（placeholder）的区别：
+@mixin可以传递参数，而%不行；
+@mixin的调用方式是@include，而%的调用方式是@extend；
+@include产生的样式是以复制拷贝的方式存在的，而@extend产生的样式是以组合申明的方式存在的。
+
+
+
+
